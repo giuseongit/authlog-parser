@@ -27,15 +27,17 @@
 #  SOFTWARE.
 #
 
+require 'optparse' # OptionParse class is required to parse options
 
-require 'optparse'
-
+# Mode constnts
 ALL = 0
 ACCEPTED = 1
 FAILED = 2
 
+# Options hash
 options = {fileOut: nil, append: false, mode: ALL}
 
+# Sandwich method used for file handling
 def use_file(filename, mode)
 	open(filename, mode) do |file|
 		yield(file)
@@ -80,6 +82,7 @@ end
 begin
 	parser.parse!
 rescue
+	# Rescue if there is an unknown option, prints and error message then exits
 	puts "unknown option!"
 	puts parser.help
 	exit
@@ -91,8 +94,21 @@ if fileIn == nil
 	exit
 end
 
+# This regex captures the date, the state, the username used and the ip
+# from wich the request has been made.
+# For instance, from this string:
+# Sep  8 18:05:58 giuse sshd[8494]: Accepted password for giuse from 127.0.0.1 port 49776 ssh2
+#
+# These groups are capured:
+# 1. Sep  8 18:05:58
+# 2. Accepted
+# 3. giuse
+# 4. 127.0.0.1
+#
+# Wich are arranged in this way:
+# On: Sep  8 18:05:58   state: Accepted   with: giuse   from:  127.0.0.1
+#
 REGEX = /([\w]{3}\ \ \d{1,2}\ \d{2}:\d{2}:\d{2}).+\: (Failed|Accepted).+ (\w+) from( [0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3})/
-
 newlog = Array.new
 use_file(fileIn, 'r') do |file|
 	while line = file.gets
@@ -111,7 +127,10 @@ use_file(fileIn, 'r') do |file|
 		
 	end
 end
+
 if options[:fileOut] == nil
+	# If no file is given for output
+	# prints the output on screen
 	newlog.each do |elem|
 		puts elem
 	end
