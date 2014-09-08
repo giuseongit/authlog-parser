@@ -37,6 +37,9 @@ FAILED = 2
 # Options hash
 options = {fileOut: nil, append: false, mode: ALL}
 
+# Default auth.log file
+defaultPath = "/var/log/auth.log"
+
 # Sandwich method used for file handling
 def use_file(filename, mode)
 	open(filename, mode) do |file|
@@ -46,7 +49,8 @@ end
 
 parser = OptionParser.new do|opts|
 	opts.banner = "Utility to parse authentication linux logs"
-	opts.banner += " to have a better viev of accesses.\nUsage: authlog-parser [options] sourcefile\nOptions:"
+	opts.banner += " to have a better viev of accesses.\nUsage: authlog-parser [options] sourcefile"
+	opts.banner += "\nNOTE: if no file is given /var/log/auth.log is used.\nOptions:"
 
 	opts.on('-o', '--output filename', 'Name of the output file') do |name|
 		options[:fileOut] = name;
@@ -90,8 +94,13 @@ end
 
 fileIn = ARGV[0]
 if fileIn == nil
-	puts "No input file given. Exiting."
-	exit
+	if File.exist?(defaultPath) 
+		puts "Using default path at #{defaultPath}"
+		fileIn = defaultPath
+	else
+		puts "No input file given. Exiting."
+		exit
+	end
 end
 
 # This regex captures the date, the state, the username used and the ip
