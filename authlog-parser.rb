@@ -27,6 +27,14 @@
 #  SOFTWARE.
 #
 
+# Opening String class to add colors for console output
+class String
+def red;            "\033[31m#{self}\033[0m" end
+def green;          "\033[32m#{self}\033[0m" end
+def cyan;           "\033[36m#{self}\033[0m" end
+def bold;           "\033[1m#{self}\033[22m" end
+end
+
 require 'optparse' # OptionParse class is required to parse options
 
 # Mode constnts
@@ -87,7 +95,7 @@ begin
 	parser.parse!
 rescue
 	# Rescue if there is an unknown option, prints and error message then exits
-	puts "unknown option!"
+	puts "unknown option!".red
 	puts parser.help
 	exit
 end
@@ -98,7 +106,7 @@ if fileIn == nil
 		puts "Using default path at #{defaultPath}"
 		fileIn = defaultPath
 	else
-		puts "No input file given. Exiting."
+		puts "No input file given. Exiting.".red
 		exit
 	end
 end
@@ -127,11 +135,15 @@ use_file(fileIn, 'r') do |file|
 		end
 		groups = match.captures
 		if(options[:mode] == ACCEPTED && groups[1] == "Accepted")
-			newlog.push "On: #{groups[0]}   state: #{groups[1]}   with: #{groups[2]}   from: #{groups[3]}"
+			newlog.push "On: "+groups[0]+"  state: "+groups[1].green+"   with: "+groups[2].cyan.bold+"   from: "+groups[3]
 		elsif(options[:mode] == FAILED && groups[1] == "Failed")
-			newlog.push "On: #{groups[0]}   state: #{groups[1]}   with: #{groups[2]}   from: #{groups[3]}"
+			newlog.push "On: "+groups[0]+"  state: "+groups[1].red+"   with: "+groups[2].cyan.bold+"   from: "+groups[3]
 		elsif(options[:mode] == ALL)
-			newlog.push "On: #{groups[0]}   state: #{groups[1]}   with: #{groups[2]}   from: #{groups[3]}"
+			if(groups[1] == "Accepted")
+				newlog.push "On: "+groups[0]+"  state: "+groups[1].green+"   with: "+groups[2].cyan.bold+"   from: "+groups[3]
+			else
+				newlog.push "On: "+groups[0]+"  state: "+groups[1].red+"   with: "+groups[2].cyan.bold+"   from: "+groups[3]
+			end
 		end
 		
 	end
