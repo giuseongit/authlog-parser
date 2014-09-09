@@ -1,7 +1,7 @@
 #!/usr/bin/ruby
 
 #  
-#  name: authlog-parser 1.0
+#  name: authlog-parser 1.2
 #  author: Giuseppe Pagano <giuseppe.pagano.p@gmail.com>
 #  
 #  The MIT License (MIT)
@@ -82,7 +82,8 @@ parser = OptionParser.new do|opts|
 	end
 
 	opts.on('-v', '--version', 'Show version') do
-		puts "authlog-parser v 1.0"
+		puts "authlog-parser v 1.2"
+		exit
 	end
 
 	opts.on('-h', '--help', 'Displays Help') do
