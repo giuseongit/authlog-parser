@@ -143,7 +143,8 @@ use_file(fileIn, 'r') do |file|
 			elsif groups[1] == "refused"
 				newlog.push "On: "+groups[0]+"  state: "+groups[1].red.bold+"  from: "+groups[3]
 			elsif groups[1] == "reverse"
-				newlog.push "On: "+groups[0]+"  "+groups[1].red.bold+" mapping".red.bold+" from: "+groups[3].slice(0)
+				groups[3].slice!(0)
+				newlog.push "On: "+groups[0]+"  "+groups[1].red.bold+" mapping".red.bold+" from: "+groups[3]
 			end
 		elsif(options[:mode] == ALL)
 			if(groups[1] == "Accepted")
@@ -151,6 +152,7 @@ use_file(fileIn, 'r') do |file|
 			elsif groups[1] == "refused"
 				newlog.push "On: "+groups[0]+"  state: "+groups[1].red.bold+"  from: "+groups[3]
 			elsif groups[1] == "reverse"
+				groups[3].slice!(0)
 				newlog.push "On: "+groups[0]+"  "+groups[1].red.bold+" mapping".red.bold+" from: "+groups[3].slice(0)
 			elsif groups[1] == "Failed" || groups[1] == "Invalid"
 				newlog.push "On: "+groups[0]+"  state: "+groups[1].red.bold+"   with: "+groups[2].cyan.bold+"   from: "+groups[3]
