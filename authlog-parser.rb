@@ -136,7 +136,7 @@ use_file(fileIn, 'r') do |file|
 		groups = match.captures
 		if(options[:mode] == ACCEPTED && groups[1] == "Accepted")
 			newlog.push "On: "+groups[0]+"  state: "+groups[1].green.bold+"   with: "+groups[2].cyan.bold+"   from: "+groups[3]
-		elsif(options[:mode] == FAILED && (groups[1] == "Failed" || groups[1] )) "refused"))
+		elsif(options[:mode] == FAILED && (groups[1] == "Failed" || groups[1] == "refused"))
 			if groups[1] == "Failed"
 				newlog.push "On: "+groups[0]+"  state: "+groups[1].red.bold+"   with: "+groups[2].cyan.bold+"   from: "+groups[3]
 			else
