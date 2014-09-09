@@ -126,7 +126,7 @@ end
 # Wich are arranged in this way:
 # On: Sep  8 18:05:58   state: Accepted   with: giuse   from:  127.0.0.1
 #
-REGEX = /([\w]{3}\ \ \d{1,2}\ \d{2}:\d{2}:\d{2}) .+\: (Failed|Accepted|refused).*( [\w-]+) from( [0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3})/
+REGEX = /([\w]{3}\ ?\ \d{1,2}\ \d{2}:\d{2}:\d{2}) .+\: (Failed|Accepted|refused).*( [\w-]+) from( [0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3})/
 newlog = Array.new
 use_file(fileIn, 'r') do |file|
 	while line = file.gets
