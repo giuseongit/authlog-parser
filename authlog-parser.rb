@@ -125,7 +125,7 @@ end
 # Wich are arranged in this way:
 # On: Sep  8 18:05:58   state: Accepted   with: giuse   from:  127.0.0.1
 #
-REGEX = /([\w]{3}\ \ \d{1,2}\ \d{2}:\d{2}:\d{2}).+\: (Failed|Accepted).+ (\w+) from( [0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3})/
+REGEX = /([\w]{3}\ \ \d{1,2}\ \d{2}:\d{2}:\d{2}).+\: (Failed|Accepted|refused).*( \w+) from( [0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3})/
 newlog = Array.new
 use_file(fileIn, 'r') do |file|
 	while line = file.gets
@@ -136,11 +136,17 @@ use_file(fileIn, 'r') do |file|
 		groups = match.captures
 		if(options[:mode] == ACCEPTED && groups[1] == "Accepted")
 			newlog.push "On: "+groups[0]+"  state: "+groups[1].green.bold+"   with: "+groups[2].cyan.bold+"   from: "+groups[3]
-		elsif(options[:mode] == FAILED && groups[1] == "Failed")
-			newlog.push "On: "+groups[0]+"  state: "+groups[1].red.bold+"   with: "+groups[2].cyan.bold+"   from: "+groups[3]
+		elsif(options[:mode] == FAILED && (groups[1] == "Failed" || groups[1] )) "refused"))
+			if groups[1] == "Failed"
+				newlog.push "On: "+groups[0]+"  state: "+groups[1].red.bold+"   with: "+groups[2].cyan.bold+"   from: "+groups[3]
+			else
+				newlog.push "On: "+groups[0]+"  state: "+groups[1].red.bold+"  from: "+groups[3]
+			end
 		elsif(options[:mode] == ALL)
 			if(groups[1] == "Accepted")
 				newlog.push "On: "+groups[0]+"  state: "+groups[1].green.bold+"   with: "+groups[2].cyan.bold+"   from: "+groups[3]
+			elsif groups[1] == "refused"
+				newlog.push "On: "+groups[0]+"  state: "+groups[1].red.bold+"  from: "+groups[3]
 			else
 				newlog.push "On: "+groups[0]+"  state: "+groups[1].red.bold+"   with: "+groups[2].cyan.bold+"   from: "+groups[3]
 			end
