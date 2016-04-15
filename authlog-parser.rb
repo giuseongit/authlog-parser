@@ -173,7 +173,6 @@ use_file(fileIn, 'r') do |file|
 	end
 end
 
-# 
 if options[:fileOut] == nil
 	# If no file is given for output
 	# prints the output on screen
